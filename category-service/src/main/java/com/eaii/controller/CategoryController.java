@@ -5,6 +5,7 @@ import java.util.Set;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eaii.model.Category;
@@ -19,15 +20,15 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @RequestMapping("/salon/{salonId}")
+    @GetMapping("/salon/{salonId}")
     public ResponseEntity<Set<Category>> getCategoriesBySalonId(@PathVariable Long salonId) {
         Set<Category> categories = categoryService.getCategoriesBySalonId(salonId);
         return ResponseEntity.ok(categories);
     }
 
-    @RequestMapping("/salon/{salonId}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable Long salonId) throws Exception {
-        Category category = categoryService.getCategoryById(salonId);
+    @GetMapping("/{id}")
+    public ResponseEntity<Category> getCategoryById(@PathVariable("id") Long id) throws Exception {
+        Category category = categoryService.getCategoryById(id);
         return ResponseEntity.ok(category);
     }
     
