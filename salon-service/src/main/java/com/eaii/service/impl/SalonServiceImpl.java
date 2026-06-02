@@ -51,20 +51,24 @@ public class SalonServiceImpl implements SalonService {
     public Salon updateSalon(SalonDto salon, UserDto user, Long salonId) throws Exception {
         Salon existingSalon = salonRepository.findById(salonId).orElse(null);
 
-        if (existingSalon != null && salon.getOwnerId().equals(user.getId())) {
-            existingSalon.setName(salon.getName());
-            existingSalon.setAddress(salon.getAddress());
-            existingSalon.setPhoneNumber(salon.getPhoneNumber());
-            existingSalon.setEmail(salon.getEmail());
-            existingSalon.setCity(salon.getCity());
-            existingSalon.setImages(salon.getImages());
-            existingSalon.setOpenTime(salon.getOpenTime());
-            existingSalon.setCloseTime(salon.getCloseTime());
-            existingSalon.setOwnerId(user.getId());
-
-            return salonRepository.save(existingSalon);
+        if (existingSalon == null) {
+            throw new Exception("Salon not found with id: " + salonId);
         }
-        throw new Exception("Salon not found with id: " + salonId);
+
+        if (!existingSalon.getOwnerId().equals(user.getId())) {
+            throw new Exception("You are not authorized to update this salon");
+        }
+
+        existingSalon.setName(salon.getName());
+        existingSalon.setAddress(salon.getAddress());
+        existingSalon.setPhoneNumber(salon.getPhoneNumber());
+        existingSalon.setEmail(salon.getEmail());
+        existingSalon.setCity(salon.getCity());
+        existingSalon.setImages(salon.getImages());
+        existingSalon.setOpenTime(salon.getOpenTime());
+        existingSalon.setCloseTime(salon.getCloseTime());
+
+        return salonRepository.save(existingSalon);
 
     }
 
