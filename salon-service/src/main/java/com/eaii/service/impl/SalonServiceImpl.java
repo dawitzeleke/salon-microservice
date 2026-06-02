@@ -48,7 +48,7 @@ public class SalonServiceImpl implements SalonService {
     }
 
     @Override
-    public Salon updateSalon(Long salonId, SalonDto salon, UserDto user) throws Exception {
+    public Salon updateSalon(SalonDto salon, UserDto user, Long salonId) throws Exception {
         Salon existingSalon = salonRepository.findById(salonId).orElse(null);
 
         if (existingSalon != null && salon.getOwnerId().equals(user.getId())) {
