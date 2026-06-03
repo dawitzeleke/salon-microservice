@@ -1,9 +1,6 @@
 package com.eaii.model;
-import java.time.LocalTime;
-import java.util.List;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,12 +8,9 @@ import jakarta.persistence.Id;
 import lombok.Data;
 
 @Entity
-// @Getter
-// @Setter
-// @AllArgsConstructor
 @Data
-public class Salon {
-
+public class ServiceOffering {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -24,28 +18,21 @@ public class Salon {
     @Column(nullable = false)
     private String name;
 
-    @ElementCollection
-    private List<String> images;
+    @Column(nullable = false)
+    private String description;
 
     @Column(nullable = false)
-    private String address;
+    private int price;
 
     @Column(nullable = false)
-    private String phoneNumber;
+    private int duration;
 
     @Column(nullable = false)
-    private String email;
-
-
-    @Column(nullable = false)
-    private String city;
-   
-    @Column(nullable = false)
-    private Long ownerId;
+    private Long salonId;
 
     @Column(nullable = false)
-    private LocalTime openTime;
+    private Long categoryId;
 
-    @Column(nullable = false)
-    private LocalTime closeTime;
+    private String image;
+
 }
