@@ -53,7 +53,6 @@ public class BookingController {
         serviceDto.setId(1L);
         serviceDto.setPrice(399);
         serviceDto.setDuration(60);
-
         serviceDto.setName("Service 1");
         serviceDtoSet.add(serviceDto);
 
@@ -80,7 +79,7 @@ public class BookingController {
         return ResponseEntity.ok(convertToDtoSet(bookings));
     }
 
-    @GetMapping("/{bookingId}/status")
+    @GetMapping("/{bookingId}")
     public ResponseEntity<BookingDto> getBookingsById(@PathVariable Long bookingId) throws Exception {
         Booking booking = bookingService.getBookingById(bookingId);
         return ResponseEntity.ok(BookingMapper.toDto(booking));
