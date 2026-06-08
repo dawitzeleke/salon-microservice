@@ -8,9 +8,9 @@ import com.eaii.payload.response.PaymentLinkResponse;
 import com.razorpay.PaymentLink;
 
 public interface PaymentService {
-    PaymentLinkResponse createOrder(UserDto userDto, BookingDto bookingDto, PaymentMethod paymentMethod);
-    PaymentOrder getPaymentOrderById(Long id);
+    PaymentLinkResponse createOrder(UserDto userDto, BookingDto bookingDto, PaymentMethod paymentMethod) throws Exception;
+    PaymentOrder getPaymentOrderById(Long id) throws Exception;
     PaymentOrder getPaymentOrderByPaymentId(String paymentId);
-    PaymentLink  createRazorpayPaymentLink(UserDto userDto, Long amount, Long orderId);
-    String createStripePaymentLink(UserDto userDto, Long amount, Long orderId);
+    PaymentLink  createRazorpayPaymentLink(UserDto userDto, Long amount, Long orderId) throws Exception;
+    String createStripePaymentLink(UserDto userDto, Long amount, Long orderId) throws Exception;
 }

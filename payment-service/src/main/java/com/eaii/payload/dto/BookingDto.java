@@ -3,7 +3,7 @@ package com.eaii.payload.dto;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import com.eaii.domain.BookingStatus;
+// import com.eaii.domain.BookingStatus;
 
 import lombok.Data;
 
@@ -22,7 +22,7 @@ public class BookingDto {
     private Set<Long> serviceIds;
 
 
-    private BookingStatus status = BookingStatus.PENDING;
+    // private BookingStatus status = BookingStatus.PENDING;
     
     private int totalPrice;
 }
