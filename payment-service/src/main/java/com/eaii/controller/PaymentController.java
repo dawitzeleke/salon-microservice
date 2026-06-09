@@ -21,13 +21,17 @@ public class PaymentController {
     
     private final PaymentService paymentService;
 
-    public ResponseEntity<PaymentLinkResponse> createPaymentLink(@RequestBody BookingDto booking, @RequestParam PaymentMethod paymentMethod) {
+    @PostMapping("/create")
+    public ResponseEntity<PaymentLinkResponse> createPaymentLink(@RequestBody BookingDto booking, @RequestParam PaymentMethod paymentMethod) throws StripeException, RazorpayException {
         // In a real application, you would fetch the user details from the security context or database
         UserDto user = new UserDto();
         user.setId(1L); // Example user ID
         user.setName("John Doe");
         user.setEmail("john.doe@example.com");
-        return null;
+        PaymentLinkResponse res = paymentService.createPaymentLink(user, booking, paymentMethod);
+        return ResponseEntity.ok(res);
        
     }
+
+    
 }
