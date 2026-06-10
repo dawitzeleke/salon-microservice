@@ -1,17 +1,18 @@
 server:
-  port: 5005
+  port: 5003
 spring:
   application:
-    name: booking-service
+    name: category-service
   jpa:
     hibernate:
       ddl-auto: update
       show-sql: true
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/booking
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/categorydb
     username: root
     password: Mysql123!
     driver-class-name: com.mysql.cj.jdbc.Driver
+spring.jpa.show-sql: true
 eureka:
   instance:
     prefer-ip-address: true
@@ -21,5 +22,5 @@ eureka:
     service-url:
       defaultZone: "http://localhost:8070/eureka/"
 
-spring.jpa.show-sql: true
+
 
