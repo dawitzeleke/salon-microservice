@@ -3,16 +3,19 @@ package com.eaii.service.impl;
 import org.springframework.stereotype.Service;
 
 import com.eaii.domain.PaymentMethod;
+import com.eaii.domain.PaymentOrderStatus;
 import com.eaii.model.PaymentOrder;
 import com.eaii.payload.dto.BookingDto;
 import com.eaii.payload.dto.UserDto;
 import com.eaii.payload.response.PaymentLinkResponse;
 import com.eaii.repository.PaymentOrderRepository;
 import com.eaii.service.PaymentService;
+import com.razorpay.Payment;
 import com.razorpay.PaymentLink;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
 import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 import com.stripe.param.checkout.SessionCreateParams.PaymentMethodType;
@@ -39,7 +42,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentLinkResponse createOrder(UserDto user, BookingDto booking, PaymentMethod paymentMethod)
-            throws Exception {
+            throws RazorpayException, StripeException {
         Long amount = (long) booking.getTotalPrice();
         PaymentOrder order = new PaymentOrder();
         order.setAmount(amount);
@@ -84,7 +87,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public PaymentLink createRazorpayPaymentLink(UserDto user, Long Amount, Long orderId) throws Exception {
+    public PaymentLink createRazorpayPaymentLink(UserDto user, Long Amount, Long orderId) throws RazorpayException {
 
         Long amount = Amount * 100;
 
@@ -111,7 +114,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public String createStripePaymentLink(UserDto user, Long amount, Long orderId) throws Exception {
+    public String createStripePaymentLink(UserDto user, Long amount, Long orderId) throws RazorpayException, StripeException {
         Stripe.apiKey = stripeSecretKey;
 
         SessionCreateParams params = SessionCreateParams.builder()
@@ -135,5 +138,34 @@ public class PaymentServiceImpl implements PaymentService {
                 return session.getUrl();  
        
     }
+
+    @Override
+    public Boolean proceedPayment(PaymentOrder paymentOrder, String paymentId, String paymentLinkId) throws RazorpayException {
+        if(paymentOrder.getStatus().equals(PaymentOrderStatus.PENDING)){
+            if(paymentOrder.getPaymentMethod().equals(PaymentMethod.RAZORPAY)){
+                RazorpayClient razorpay = new RazorpayClient(razorpayApiKey, razorpayApiSecret);
+                Payment payment = razorpay.payments.fetch(paymentId);
+                Integer amount = payment.get("amount");
+                String status = payment.get("status");
+                if(status.equals("captured")){
+                    // produce kafka event to update booking status to confirmed
+                    paymentOrder.setStatus(PaymentOrderStatus.SUCCESS);
+                    paymentOrderRepository.save(paymentOrder);
+                    return true;
+                }
+                return false;
+                    
+                }else{
+                    // For Stripe, you would typically verify the payment using webhooks. 
+                    // This method can be used to update the payment order status after receiving a webhook event.
+                    // produce kafka event to update booking status to confirmed
+                    paymentOrder.setStatus(PaymentOrderStatus.SUCCESS);
+                    paymentOrderRepository.save(paymentOrder);
+                    return true;
+                }
+        }
+        return false;
+    }
+    
 
 }
