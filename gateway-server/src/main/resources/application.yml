@@ -4,7 +4,44 @@ server:
 spring:
   application:
     name: gateway-server
-  
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: BOOK-SERVICE
+              uri: 
+                "lb://BOOK-SERVICE"
+              predicates:
+                - Path=/api/bookings/**
+            - id: USER-SERVICE
+              uri: 
+                "lb://USER-SERVICE"
+              predicates:
+                - Path=/auth/**,/api/users/**,/api/admin/users/**
+            - id: PAYMENT-SERVICE
+              uri: 
+                "lb://PAYMENT-SERVICE"
+              predicates:
+                - Path=/api/payments/**
+
+            - id: CATEGORY-SERVICE
+              uri: 
+                "lb://CATEGORY-SERVICE"
+              predicates:
+                - Path=/api/categories/**
+
+            - id: SALON-SERVICE
+              uri: 
+                "lb://SALON-SERVICE"
+              predicates:
+                - Path=/salons/**,/api/salons/**,/api/admin/salons/**
+
+            - id: SERVICE-OFFERING
+              uri: 
+                "lb://SERVICE-OFFERING"
+              predicates:
+                - Path=/api/service-offering/**
 eureka:
   instance:
     prefer-ip-address: true

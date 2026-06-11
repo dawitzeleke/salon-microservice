@@ -16,7 +16,7 @@ import com.eaii.service.ServiceOfferingService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/services-offering")
+@RequestMapping("/api/service-offering")
 @RequiredArgsConstructor
 public class ServiceOfferingController {
     
