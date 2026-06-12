@@ -9,9 +9,9 @@ spring:
       server:
         webmvc:
           routes:
-            - id: BOOK-SERVICE
+            - id: BOOKING-SERVICE
               uri: 
-                "lb://BOOK-SERVICE"
+                "lb://BOOKING-SERVICE"
               predicates:
                 - Path=/api/bookings/**
             - id: USER-SERVICE
